@@ -1,0 +1,23 @@
+{
+  "name": "alunoecursos",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Este é um projeto desenvolvido com Node.js e Express para gerenciar cursos e alunos, incluindo funcionalidades de CRUD (Create, Read, Update, Delete) para cursos e alunos, além da capacidade de matricular alunos em cursos.",
+  "dependencies": {
+    "expre": "^0.1.1",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.1.1"
+  },
+  "type": "commonjs"
+}
