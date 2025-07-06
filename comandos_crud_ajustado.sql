@@ -29,6 +29,17 @@ SELECT * FROM alunos;
 -- Ver todos os registros da tabela cursos
 SELECT * FROM cursos;
 
+-- Ver pelo ID 
+SELECT * FROM nome_da_tabela WHERE id = valor_do_id;
+-- Exemplo: 
+SELECT * FROM alunos WHERE id = 1;
+
+-- Ver curso pelo ID 
+SELECT * FROM cursos WHERE id = valor_do_id;
+-- Exemplo: 
+SELECT * FROM cursos WHERE id = 1;  
+
+
 -- Ver todos os registros da tabela matriculas
 SELECT * FROM matriculas;
 -- Se quiser apenas colunas específicas, 
@@ -37,7 +48,7 @@ SELECT * FROM matriculas;
 -- nome, email FROM alunos;
 SELECT nome, email FROM alunos;
 --========================================================================================
-
+-- Fazer os Cruds de cada tabela
 -- =====================================================
 -- CREATE (CRIAR) - OPERAÇÕES DE INSERÇÃO
 -- =====================================================
@@ -46,9 +57,10 @@ SELECT nome, email FROM alunos;
 INSERT INTO alunos (nome, email, data_nascimento) 
 VALUES ('Ana Costa', 'ana.costa@example.com', '1997-05-20');
 
--- 2. Inserir novo curso
+-- 2. Inserir novo curso: Observação: A Letra "E" indica que o nome 
+-- do curso contém acentuação: como por exemplo: Programação Mobile com React Native
 INSERT INTO cursos (nome_curso, descricao) 
-VALUES ('Programação Mobile com React Native', 'Desenvolva aplicativos móveis multiplataforma');
+VALUES (E'Programação Mobile com React Native', 'Desenvolva aplicativos móveis multiplataforma');
 
 -- Cursos pré matriculados
 -- ('Desenvolvimento Web Full Stack', 'Aprenda a criar aplicações web completas, do front-end ao back-end.'),
@@ -82,6 +94,7 @@ VALUES (
 -- READ (LER) - OPERAÇÕES DE CONSULTA
 -- =====================================================
 
+
 -- 1. Listar todos os alunos
 SELECT * FROM alunos ORDER BY nome;
 
@@ -97,6 +110,8 @@ FROM matriculas m
 JOIN alunos a ON m.aluno_id = a.id
 JOIN cursos c ON m.curso_id = c.id
 ORDER BY a.nome, c.nome_curso;
+
+
 
 -- 4. Buscar aluno por email
 SELECT * FROM alunos WHERE email = 'ana.costa@example.com';
@@ -127,60 +142,64 @@ SELECT * FROM cursos WHERE nome_curso = 'Programação Mobile com React Native';
 -- DELETE (EXCLUIR) - OPERAÇÕES DE REMOÇÃO
 -- =====================================================
 
--- 1. Remover matrícula específica
+-- 1. Primeiro, veja as matrículas existentes para identificar os IDs
+SELECT m.*, a.nome as nome_aluno, c.nome_curso 
+FROM matriculas m
+JOIN alunos a ON m.aluno_id = a.id
+JOIN cursos c ON m.curso_id = c.id;
+
+-- 2. Remover matrícula específica por IDs
+-- Substitua os valores de exemplo (1 e 1) pelos IDs reais
 DELETE FROM matriculas 
-WHERE aluno_id = (SELECT id FROM alunos WHERE email = 'ana.silva@example.com')
-  AND curso_id = (SELECT id FROM cursos WHERE nome_curso = 'Programação Mobile com React Native');
+WHERE aluno_id = 1  -- Substitua pelo ID do aluno
+  AND curso_id = 1; -- Substitua pelo ID do curso
 
--- 2. Remover aluno (isso também remove suas matrículas devido ao CASCADE)
-DELETE FROM alunos WHERE email = 'ana.silva@example.com';
+-- 3. Remover aluno por ID (isso também remove suas matrículas devido ao CASCADE)
+-- Primeiro, veja a lista de alunos para encontrar o ID
+SELECT id, nome, email FROM alunos ORDER BY id;
 
--- 3. Remover curso (isso também remove as matrículas relacionadas)
-DELETE FROM cursos WHERE nome_curso = 'Programação Mobile com React Native';
+-- Depois, remova o aluno pelo ID
+DELETE FROM alunos WHERE id = 1;  -- Substitua pelo ID do aluno
 
--- 4. Verificar se as remoções foram bem-sucedidas
-SELECT COUNT(*) as total_alunos FROM alunos;
-SELECT COUNT(*) as total_cursos FROM cursos;
-SELECT COUNT(*) as total_matriculas FROM matriculas;
+-- 4. Remover curso por ID (isso também remove as matrículas relacionadas)
+-- Primeiro, veja a lista de cursos para encontrar o ID
+SELECT id, nome_curso FROM cursos ORDER BY id;
 
--- =====================================================
--- CONSULTAS AVANÇADAS
--- =====================================================
+-- Depois, remova o curso pelo ID
+DELETE FROM cursos WHERE id = 1;  -- Substitua pelo ID do curso
 
--- 1. Contar alunos por curso
-SELECT 
-    c.nome_curso,
-    COUNT(m.aluno_id) as total_alunos
-FROM cursos c
-LEFT JOIN matriculas m ON c.id = m.curso_id
-GROUP BY c.id, c.nome_curso
-ORDER BY total_alunos DESC;
+-- 5. Verificar remoções e listar o que permaneceu
+-- Verificar alunos
+SELECT 'ALUNOS REGISTRADOS' as status;
+SELECT id, nome, email FROM alunos ORDER BY id;
 
--- 2. Alunos que não estão matriculados em nenhum curso
-SELECT 
-    a.nome,
-    a.email
+-- Verificar cursos
+SELECT 'CURSOS REGISTRADOS' as status;
+SELECT id, nome_curso, descricao FROM cursos ORDER BY id;
+
+-- Verificar matrículas atuais
+SELECT 'MATRÍCULAS ATUAIS' as status;
+SELECT m.*, a.nome as aluno, c.nome_curso as curso
+FROM matriculas m
+JOIN alunos a ON m.aluno_id = a.id
+JOIN cursos c ON m.curso_id = c.id
+ORDER BY a.nome, c.nome_curso;
+
+-- Verificar se há alunos sem matrículas
+SELECT 'ALUNOS SEM MATRÍCULAS' as status;
+SELECT a.id, a.nome, a.email
 FROM alunos a
 LEFT JOIN matriculas m ON a.id = m.aluno_id
-WHERE m.aluno_id IS NULL;
+WHERE m.aluno_id IS NULL
+ORDER BY a.nome;
 
--- 3. Cursos sem alunos matriculados
-SELECT 
-    c.nome_curso,
-    c.descricao
+-- Verificar cursos sem alunos matriculados
+SELECT 'CURSOS SEM ALUNOS' as status;
+SELECT c.id, c.nome_curso, c.descricao
 FROM cursos c
 LEFT JOIN matriculas m ON c.id = m.curso_id
-WHERE m.curso_id IS NULL;
-
--- 4. Alunos com mais de um curso
-SELECT 
-    a.nome,
-    COUNT(m.curso_id) as total_cursos
-FROM alunos a
-JOIN matriculas m ON a.id = m.aluno_id
-GROUP BY a.id, a.nome
-HAVING COUNT(m.curso_id) > 1
-ORDER BY total_cursos DESC;
+WHERE m.curso_id IS NULL
+ORDER BY c.nome_curso;
 
 -- =====================================================
 -- MENSAGEM FINAL

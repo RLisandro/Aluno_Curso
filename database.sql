@@ -43,9 +43,9 @@ CREATE TABLE matriculas (
 
 -- Inserir cursos de exemplo
 INSERT INTO cursos (nome_curso, descricao) VALUES
-('Desenvolvimento Web Full Stack', 'Aprenda a criar aplicações web completas, do front-end ao back-end.'),
-('Ciência de Dados com Python', 'Domine as principais bibliotecas de Python para análise e visualização de dados.'),
-('Design de UI/UX para Iniciantes', 'Conceitos e ferramentas essenciais para criar interfaces amigáveis e eficazes.');
+(E'Desenvolvimento Web Full Stack', E'Aprenda a criar aplicações web completas, do front-end ao back-end.'),
+(E'Ciência de Dados com Python', E'Domine as principais bibliotecas de Python para análise e visualização de dados.'),
+(E'Design de UI/UX para Iniciantes', E'Conceitos e ferramentas essenciais para criar interfaces amigáveis e eficazes.');
 
 -- Inserir alunos de exemplo
 INSERT INTO alunos (nome, email, data_nascimento) VALUES

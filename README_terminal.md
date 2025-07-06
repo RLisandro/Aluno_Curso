@@ -68,13 +68,21 @@ Este guia fornece instruções passo a passo para configurar e executar o projet
 ## 🛠️ Comandos Úteis
 
 - Instalar dependências: `npm install`
+
 - Iniciar servidor: `node app.js`
+
 - Ver versão do Node: `node -v`
+
 - Ver versão do npm: `npm -v`
+
 - Inicializar projeto: `npm init -y`
+
 - Instalar express: `npm install express`
+
 - Instalar pg: `npm install pg`
+
 - Instalar jest: `npm install --save-dev jest`
+
 - Instalar supertest: `npm install --save-dev supertest`
 
 ## ⚠️ Solução de Problemas

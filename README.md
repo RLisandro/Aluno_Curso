@@ -16,7 +16,9 @@ node -v
 npm -v
 npm init -y
 npm install express
+npm install pg
 npm install --save-dev jest
+npm install --save-dev supertest
 
 Se não estiverem instalados, você pode baixar o Node.js aqui e o npm será instalado automaticamente.
 
